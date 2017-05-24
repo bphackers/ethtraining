@@ -20,3 +20,12 @@ In another terminal
 Wait a few minutes, then check if you got testnet ethers
 
     web3.fromWei(eth.getBalance(eth.accounts[0]), "ether")
+
+--------------------------------------------------------------------------
+
+sudo apt-get install ethminer
+parity --chain ropsten
+
+
+---------------------------------------------------------------------------
+git clone https://github.com/iExecBlockchainComputing/rlc-token
