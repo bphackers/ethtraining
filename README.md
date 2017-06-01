@@ -54,192 +54,62 @@ Clone the Iexec repo
 Browse the repo. There are 2 main contracts : RLC and crowdsale. First, deploy the RLC contract. RLC contract depends of other contracts we paste with
 Original contract has been deployed here : https://etherscan.io/address/0x607F4C5BB672230e8672085532f7e901544a7375#code
 
+The code is the file RLC.sol
 
-    pragma solidity ^0.4.8;
-
-    contract ERC20 {
-      uint public totalSupply;
-      function balanceOf(address who) constant returns (uint);
-      function allowance(address owner, address spender) constant returns (uint);
-
-      function transfer(address to, uint value) returns (bool ok);
-      function transferFrom(address from, address to, uint value) returns (bool ok);
-      function approve(address spender, uint value) returns (bool ok);
-      event Transfer(address indexed from, address indexed to, uint value);
-      event Approval(address indexed owner, address indexed spender, uint value);
-    }
-
-
-    contract Ownable {
-      address public owner;
-
-      function Ownable() {
-        owner = msg.sender;
-      }
-
-      modifier onlyOwner() {
-        if (msg.sender == owner)
-          _;
-      }
-
-      function transferOwnership(address newOwner) onlyOwner {
-        if (newOwner != address(0)) owner = newOwner;
-      }
-
-    }
-
-
-    contract TokenSpender {
-        function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData);
-    }
-
-    contract SafeMath {
-      function safeMul(uint a, uint b) internal returns (uint) {
-        uint c = a * b;
-        assert(a == 0 || c / a == b);
-        return c;
-      }
-
-      function safeDiv(uint a, uint b) internal returns (uint) {
-        assert(b > 0);
-        uint c = a / b;
-        assert(a == b * c + a % b);
-        return c;
-      }
-
-      function safeSub(uint a, uint b) internal returns (uint) {
-        assert(b <= a);
-        return a - b;
-      }
-
-      function safeAdd(uint a, uint b) internal returns (uint) {
-        uint c = a + b;
-        assert(c>=a && c>=b);
-        return c;
-      }
-
-      function max64(uint64 a, uint64 b) internal constant returns (uint64) {
-        return a >= b ? a : b;
-      }
-
-      function min64(uint64 a, uint64 b) internal constant returns (uint64) {
-        return a < b ? a : b;
-      }
-
-      function max256(uint256 a, uint256 b) internal constant returns (uint256) {
-        return a >= b ? a : b;
-      }
-
-      function min256(uint256 a, uint256 b) internal constant returns (uint256) {
-        return a < b ? a : b;
-      }
-
-      function assert(bool assertion) internal {
-        if (!assertion) {
-          throw;
-        }
-      }
-    }
-
-
-    contract RLC is ERC20, SafeMath, Ownable {
-
-        /* Public variables of the token */
-      string public name;       //fancy name
-      string public symbol;
-      uint8 public decimals;    //How many decimals to show.
-      string public version = 'v0.1';
-      uint public initialSupply;
-      uint public totalSupply;
-      bool public locked;
-      //uint public unlockBlock;
-
-      mapping(address => uint) balances;
-      mapping (address => mapping (address => uint)) allowed;
-
-      // lock transfer during the ICO
-      modifier onlyUnlocked() {
-        if (msg.sender != owner && locked) throw;
-        _;
-      }
-
-      /*
-       *  The RLC Token created with the time at which the crowdsale end
-       */
-
-      function RLC() {
-        // lock the transfer function during the crowdsale
-        locked = true;
-        //unlockBlock=  now + 45 days; // (testnet) - for mainnet put the block number
-
-        initialSupply = 87000000000000000;
-        totalSupply = initialSupply;
-        balances[msg.sender] = initialSupply;// Give the creator all initial tokens                    
-        name = 'iEx.ec Network Token';        // Set the name for display purposes     
-        symbol = 'RLC';                       // Set the symbol for display purposes  
-        decimals = 9;                        // Amount of decimals for display purposes
-      }
-
-      function unlock() onlyOwner {
-        locked = false;
-      }
-
-      function burn(uint256 _value) returns (bool){
-        balances[msg.sender] = safeSub(balances[msg.sender], _value) ;
-        totalSupply = safeSub(totalSupply, _value);
-        Transfer(msg.sender, 0x0, _value);
-        return true;
-      }
-
-      function transfer(address _to, uint _value) onlyUnlocked returns (bool) {
-        balances[msg.sender] = safeSub(balances[msg.sender], _value);
-        balances[_to] = safeAdd(balances[_to], _value);
-        Transfer(msg.sender, _to, _value);
-        return true;
-      }
-
-      function transferFrom(address _from, address _to, uint _value) onlyUnlocked returns (bool) {
-        var _allowance = allowed[_from][msg.sender];
-
-        balances[_to] = safeAdd(balances[_to], _value);
-        balances[_from] = safeSub(balances[_from], _value);
-        allowed[_from][msg.sender] = safeSub(_allowance, _value);
-        Transfer(_from, _to, _value);
-        return true;
-      }
-
-      function balanceOf(address _owner) constant returns (uint balance) {
-        return balances[_owner];
-      }
-
-      function approve(address _spender, uint _value) returns (bool) {
-        allowed[msg.sender][_spender] = _value;
-        Approval(msg.sender, _spender, _value);
-        return true;
-      }
-
-        /* Approve and then comunicate the approved contract in a single tx */
-      function approveAndCall(address _spender, uint256 _value, bytes _extraData){    
-          TokenSpender spender = TokenSpender(_spender);
-          if (approve(_spender, _value)) {
-              spender.receiveApproval(msg.sender, _value, this, _extraData);
-          }
-      }
-
-      function allowance(address _owner, address _spender) constant returns (uint remaining) {
-        return allowed[_owner][_spender];
-      }
-
-    }
-
-
-If you don't want to copy paste the code above go to     https://ethereum.github.io/browser-solidity/?#gist=845a71bf89b5b496d47d1757ff75dde8&version=soljson-v0.4.8+commit.60cc1668.js&optimize=true
+If you don't want to copy paste the code go to     https://ethereum.github.io/browser-solidity/?#gist=845a71bf89b5b496d47d1757ff75dde8&version=soljson-v0.4.8+commit.60cc1668.js&optimize=true
 
 Add a 0 to trasaction gas limit of remix  30000000
+
 
 Here the tx to deploy
 https://ropsten.etherscan.io/tx/0x97f52c2ccfaa74269591ff0fac5e32e7b0aae942e91f4315c9a3ecba4bd8bf7f
 Here the deployed contract
 https://ropsten.etherscan.io/address/0xb242745e8e35a2541355e4ecc550abc7c41ff91e
 
-The bytecode is supposed to be the same 
+the address of the RLC contract is : 0xB242745E8e35a2541355e4ecc550Abc7C41fF91E
+
+
+Deploy the crowdsale contract
+
+Original contract has been deployed here:
+https://etherscan.io/address/0xec33fb8d7c781f6feaf2dd46d521d4f292320200
+
+
+Paste the code of Crowdsale.sol in remix and replace the initialization lines of rlc & BTCproxy:
+
+Replace
+
+    rlc = RLC(0x607F4C5BB672230e8672085532f7e901544a7375);
+
+By the same line with the address of your RLC contract you deploy just before. Here it's:
+
+    rlc = RLC(0xB242745E8e35a2541355e4ecc550Abc7C41fF91E);
+
+Create an address on https://www.myetherwallet.com/ to change the address of BTCProxy
+Here I generated:
+
+    public: 0xDbfe68d4625Cd69210Ebd22de4C697afA83289b3
+    private: fa730b5eb91b7c576a4c6cae4b032bc0c86f855e6d7bb31c4edfdaf43f8df795  
+
+Replace
+
+    BTCproxy = 0x75c6cceb1a33f177369053f8a0e840de96b4ed0e;
+
+By the generated address
+
+    BTCproxy = 0xDbfe68d4625Cd69210Ebd22de4C697afA83289b3;
+
+
+BTCProxy address is the adress from which receiveBTC is called, the address need some gas if this address has to be used. There are manual entries when payment in BTC is done, emission of RLC directly without using eth, a kind of oracle. We won't use it especially
+
+Deploy the contract crowdsale by adding a 0 to trasaction gas limit of remix  30000000
+
+Here the deployed contract
+https://ropsten.etherscan.io/tx/0xa037b87be681ce60f76057f2c3742bbbe73e5f2a4fbd0ee9cf6da6944a3af774
+
+
+Next steps:
+
+Transfer the RLC tokens to the crowdsale contract
+Transfer the ownership to the crowdsale contract (commented truffle console lines in the repo)
+Call start in the crowdsale contract to begin the ICO
