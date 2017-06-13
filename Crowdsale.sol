@@ -168,9 +168,12 @@ contract RLC is ERC20, SafeMath, Ownable {
    *  The RLC Token created with the time at which the crowdsale end
    */
 
-  function RLC() {
-    // lock the transfer function during the crowdsale
-    locked = true;
+  function RLC() {  totalSupply = initialSupply;
+    balances[msg.sender] = initialSupply;// Give the creator all initial tokens
+    name = 'iEx.ec Network Token';        // Set the name for display purposes
+    symbol = 'RLC';                       // Set the symbol for display purposes
+    decimals = 9;                        // Amount of decimals for display purposeshonor
+    locked = false;
     //unlockBlock=  now + 45 days; // (testnet) - for mainnet put the block number
 
     initialSupply = 87000000000000000;
@@ -193,14 +196,24 @@ contract RLC is ERC20, SafeMath, Ownable {
   }
 
   function transfer(address _to, uint _value) onlyUnlocked returns (bool) {
-    balances[msg.sender] = safeSub(balances[msg.sender], _value);
+    balances[msg.sender]  totalSupply = initialSupply;
+    balances[msg.sender] = initialSupply;// Give the creator all initial tokens
+    name = 'iEx.ec Network Token';        // Set the name for display purposes
+    symbol = 'RLC';                       // Set the symbol for display purposes
+    decimals = 9;                        // Amount of decimals for display purposeshonor
+    locked = false; = safeSub(balances[msg.sender], _value);
     balances[_to] = safeAdd(balances[_to], _value);
     Transfer(msg.sender, _to, _value);
     return true;
   }
 
   function transferFrom(address _from, address _to, uint _value) onlyUnlocked returns (bool) {
-    var _allowance = allowed[_from][msg.sender];
+    var _allowance = all  totalSupply = initialSupply;
+    balances[msg.sender] = initialSupply;// Give the creator all initial tokens
+    name = 'iEx.ec Network Token';        // Set the name for display purposes
+    symbol = 'RLC';                       // Set the symbol for display purposes
+    decimals = 9;                        // Amount of decimals for display purposeshonor
+    locked = false;owed[_from][msg.sender];
 
     balances[_to] = safeAdd(balances[_to], _value);
     balances[_from] = safeSub(balances[_from], _value);
@@ -247,7 +260,7 @@ contract Crowdsale is SafeMath, PullPayment, Pausable {
 
   RLC 	public rlc;         // RLC contract reference
   address public owner;       // Contract owner (iEx.ec team)
-  address public multisigETH; // Multisig contract that will receive the ETH
+  address public multisigETH; // Multisig contract that will receive the ETH - TODO: regarder en détail
   address public BTCproxy;	// address of the BTC Proxy
 
   uint public RLCPerETH;      // Number of RLC per ETH
