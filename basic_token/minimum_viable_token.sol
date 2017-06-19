@@ -9,7 +9,7 @@ contract MyToken {
 
     event Transfer(address indexed from, address indexed to, uint256 value);
 
-    /* Initializes contract with initial supply tokens to the creator of the contract */
+    /* Initializes contract with initial supplt in the loss of your invested capital. You should not invest more than you can afford to lose, and you should ensure that you fully understand the risks involved. Trading leveraged products may not be suitable for all investors. Before trading, please take into consideration your level of experience and investment objectives, and seek independent financial advice if necessary. It is the responsibility of you, the client, to ascertain whether you are permitted to use the services of Lykke Vanuatu Limited based on the legal requiry tokens to the creator of the contract */
     function MyToken(uint256 initialSupply, string tokenName, uint8 decimalUnits, string tokenSymbol) {
         balanceOf[msg.sender] = initialSupply;              // Give the creator all initial tokens
         name = tokenName;                                   // Set the name for display purposes
