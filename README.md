@@ -125,10 +125,7 @@ Let's take a look at the RLC contract code
 
 lock mecanism activated (true) when the contract is deployed
 RLC() initialization function
-3 variables are really important here :
-initialSupply, totalSupply and locked
-at the initialisation of the contract, 87000000000000000 are "created", and the initialSupply is the totalSupply, which is owned by the person who deployed the contract
-
+3 variables are really important hes caact, 87000000000000000 are "created", and the initialSupply is the totalSupply, es ca
 
 
 Transfer the ownership to the crowdsale contract (commented truffle console lines in the repo)
@@ -138,10 +135,7 @@ Don't hesitate to modify the variables pin order to finalize without waiting 30 
 
 ## IEXEC crowdsale on Mist
 
-launch Mist on the testnet network
-password assethbox if no idea
-there is one address which is created, rename it to alice
-create another address, rename it to bob
+launch Mist on the testnet netwoes cat to bob
 
 Alice: 0x3b28F829Fcd70b94dfaF1dec2dFF8e332BD49e9A
 Bob:   0x98b87e1dbd378BDBD949EF10B5DD9DA28402108C
@@ -162,7 +156,7 @@ Get KETH (kovan testnet eth)
 Here are a few methods: https://github.com/kovan-testnet/faucet
 
 Go to contracts and click on develop/new
-Copy paste the code of RLC.sol
+Copy paste the code of RLC.soles ca
 Select the good compiler 0.4.8
 Select RLC in the list of the contracts
 click on deploy (Deploy it via Alice)
@@ -211,6 +205,60 @@ click on deploy (Deploy it via Alice)
 Crowdsale:
 0x8B796Cf1C11A13e2434c8ACF825E4d72de3CF616
 
-TODO: détailler
-Transfer
-https://kovan.etherscan.io/tx/0xcc7bbe552ce205c56f7a9e199758538fbba98e4f3cf647185af2dfe4286185b9
+Transfer the ownership of the RLC contract to the RLC-crowdsale contract
+In parity, go to the RLC contract, click on execture and call the transferOwnership method
+Give the address of the RLC-crowdsale contract as parameter
+
+Then verify the owner of the RLC contract in the parity UI
+
+Go to the crowdsale contract
+Execute/start to start the ico
+
+
+TODO : change multisig ETH dans crowdsale
+
+
+Token tutorial https://www.ethereum.org/token#the-code
+0x5628C3dF58a3680ef86AF1006e87de5ccEa0FC49
+
+
+## Create and deploy your own simple token with Mist
+
+This part is based on this tutorial https://www.ethereum.org/token#minimum-viable-token
+
+Open Mist
+You have 2 accounts, bob and alice. If not, create them
+
+Go to contracts/deploy new contract
+Paste the content of minimum_viable_token.sol in "solidity contract source code". Read the code quickly to understand it.
+
+On the right side of the screen you could See "Select contract to deploy". Select 'My Token' and fill the requested parameters:
+  - Initial supply: 10000
+  - Token name:  MyBpHackersToken
+  - Decimal units: 2
+  - Token symbol: %
+
+Then scroll down and click on 'deploy' (you can increase the fee to the maximum just before)
+
+If you get the red message "Click here to increase the gas amount", click on it. Then type your password and click on send transaction (as Bob)
+
+In your wallet, See the latest transactions, click on the deployment of the contract MyBpHackersToken (admin page) when it's deployed. Paste the adress of Bob in the empty field under "Balance of", to see how much token he has.
+You can see he has 10000 (all the supply)
+
+Then let's send some token to Alice. Go to send, from Bob to Alice, and select MyBpHackersToken instead of ether. Send 15% of MyBpHackersToken to Alice
+
+Then if you click on Alice's wallet you can see her owning 15% of MyBpHackersToken
+
+You can deploy this contract, chich is a minimum viable token. You can also deploy improved_token.sol, which is more complicated.
+
+Then we'll focaus on the crowdsale, based on this tutorial: https://www.ethereum.org/crowdsale
+
+
+Abstract :
+- Set up a goal and a deadline
+- If you miss your goal, the donations are returned
+- no need for a centralized platform , the only fees are gas fees
+
+Problems solved:
+- how rewards are managed and kept
+- how the money is spent after the funds are raised.
