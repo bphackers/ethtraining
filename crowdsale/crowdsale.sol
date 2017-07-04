@@ -34,7 +34,7 @@ contract Crowdsale {
         uint amount = msg.value;
         balanceOf[msg.sender] = amount;
         amountRaised += amount;
-        tokenReward.transfer(msg.sender, amount / price);
+        tokenReward.transfer(msg.sender, amount * 1 ether);
         FundTransfer(msg.sender, amount, true);
     }
 
@@ -63,7 +63,7 @@ contract Crowdsale {
             }
         }
 
-        if (fundingGoalReached && beneficiary == msg.sender) {
+        if (fundingGoalReached) { //  && beneficiary == msg.sender
             if (beneficiary.send(amountRaised)) {
                 FundTransfer(beneficiary, amountRaised, false);
             } else {
