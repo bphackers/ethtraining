@@ -22,7 +22,7 @@ Launch geth (private chain)
 
 In another terminal ('CTRL + Shift + o' with terminator to split horizontally your terminal)
 
-    geth attach ~/.ethereum/bnp999/geth.ipc
+    geth attach ~/.ethereum/bnp9991/geth.ipc
 
 You are in the geth console, you can type command after '>' letter
 
@@ -38,4 +38,4 @@ Start mining
 
 In another terminal ('CTRL + Shift + e' with terminator to split vertically your terminal)
 
-    mist --rpc ~/.ethereum/bnp999/geth.ipc
+    /opt/Mist/mist --rpc ~/.ethereum/bnp9991/geth.ipc
