@@ -8,6 +8,8 @@ contract MyToken {
     string public symbol;
     uint8 public decimals;
     uint256 public totalSupply;
+    address public owner;
+    bool public blocked = false;
 
     /* This creates an array with all balances */
     mapping (address => uint256) public balanceOf;
@@ -19,6 +21,25 @@ contract MyToken {
     /* This notifies clients about the amount burnt */
     event Burn(address indexed from, uint256 value);
 
+    modifier ownerOnly() {
+      if (msg.sender != owner) throw;
+      _;
+    }
+
+    function changeOwner(address _newOwner) ownerOnly {
+      owner = _newOwner;
+    }
+
+    function blockTransferOfTokens() ownerOnly {
+      if (!blocked) blocked = true;
+    }
+
+    function unBlockTransferOfTokens() ownerOnly {
+      if (blocked) blocked = false;
+    }
+
+
+
     /* Initializes contract with initial supply tokens to the creator of the contract */
     function MyToken(
         uint256 initialSupply,
@@ -26,6 +47,7 @@ contract MyToken {
         uint8 decimalUnits,
         string tokenSymbol
         ) {
+        owner = msg.sender;
         balanceOf[msg.sender] = initialSupply;              // Give the creator all initial tokens
         totalSupply = initialSupply;                        // Update total supply
         name = tokenName;                                   // Set the name for display purposes
@@ -36,6 +58,7 @@ contract MyToken {
     /* Send coins */
     function transfer(address _to, uint256 _value) {
         if (_to == 0x0) throw;                               // Prevent transfer to 0x0 address. Use burn() instead
+        if (blocked) throw;                                  // Prevent transfer if transfers are blocked
         if (balanceOf[msg.sender] < _value) throw;           // Check if the sender has enough
         if (balanceOf[_to] + _value < balanceOf[_to]) throw; // Check for overflows
         balanceOf[msg.sender] -= _value;                     // Subtract from the sender
@@ -63,6 +86,7 @@ contract MyToken {
     /* A contract attempts to get the coins */
     function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
         if (_to == 0x0) throw;                                // Prevent transfer to 0x0 address. Use burn() instead
+        if (blocked) throw;                                  // Prevent transfer if transfers are blocked
         if (balanceOf[_from] < _value) throw;                 // Check if the sender has enough
         if (balanceOf[_to] + _value < balanceOf[_to]) throw;  // Check for overflows
         if (_value > allowance[_from][msg.sender]) throw;     // Check allowance
