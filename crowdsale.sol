@@ -5,7 +5,10 @@ contract Crowdsale {
     address public beneficiary;
     uint public fundingGoal; uint public amountRaised;
     //uint public deadline;
-    uint public price;
+    //remove
+    //uint public price;
+    // add
+    uint public numberOfTokenPerEther;
     token public tokenReward;
     mapping(address => uint256) public balanceOf;
     bool public fundingGoalReached = false; // rajout pub
@@ -20,13 +23,18 @@ contract Crowdsale {
         address ifSuccessfulSendTo,
         uint fundingGoalInEthers,
         //uint durationInMinutes,
-        uint etherCostOfEachToken,
+        // remove
+        // uint etherCostOfEachToken,
+        //add
+        uint numberOfTokenPerEther_,
         token addressOfTokenUsedAsReward
     ) {
         beneficiary = ifSuccessfulSendTo;
         fundingGoal = fundingGoalInEthers * 1 ether;
         //deadline = now + durationInMinutes * 1 minutes;
-        price = etherCostOfEachToken * 1 ether;
+        //remove
+        //price = etherCostOfEachToken * 1 ether;
+        numberOfTokenPerEther = numberOfTokenPerEther_;
         tokenReward = token(addressOfTokenUsedAsReward);
     }
 
@@ -36,7 +44,9 @@ contract Crowdsale {
         uint amount = msg.value;
         balanceOf[msg.sender] += amount;
         amountRaised += amount;
-        tokenReward.transfer(msg.sender, amount / price);
+        //remove
+        // tokenReward.transfer(msg.sender, amount / price);
+        tokenReward.transfer(msg.sender, amount * numberOfTokenPerEther);
         FundTransfer(msg.sender, amount, true);
     }
 
