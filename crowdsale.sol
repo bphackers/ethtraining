@@ -21,13 +21,13 @@ contract Crowdsale {
         uint fundingGoalInEthers,
         //uint durationInMinutes,
         // remove
-        uint szaboCostOfEachToken, //szabo = 10^-6. Dans le cas ou 1 ether = 1000 tokens il faut set la value à 1000. Si 1 ether = 10000 tokens il faut set la value à 100 etc...
+        uint szaboCostOfEachToken, //szabo = 10^-6. when 1 ether = 1000 tokens you should set the value to 1000. If 1 ether = 10000 tokens it should be set on 100 etc...
         token addressOfTokenUsedAsReward
     ) {
         beneficiary = ifSuccessfulSendTo;
         fundingGoal = fundingGoalInEthers * 1 ether;
         //deadline = now + durationInMinutes * 1 minutes;
-        price = szaboCostOfEachToken * 1 szabo; //modification d'unité
+        price = szaboCostOfEachToken * 1 szabo; //Unit change
         tokenReward = token(addressOfTokenUsedAsReward);
     }
 
