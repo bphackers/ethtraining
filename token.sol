@@ -22,7 +22,7 @@
       event Burn(address indexed from, uint256 value);
 
       modifier ownerOnly() {
-        if (msg.sender != owner) throw;
+        require(msg.sender == owner);
         _;
       }
 
@@ -57,10 +57,10 @@
 
       /* Send coins */
       function transfer(address _to, uint256 _value) {
-          if (_to == 0x0) throw;                               // Prevent transfer to 0x0 address. Use burn() instead
-          if (blocked) throw;                                  // Prevent transfer if transfers are blocked
-          if (balanceOf[msg.sender] < _value) throw;           // Check if the sender has enough
-          if (balanceOf[_to] + _value < balanceOf[_to]) throw; // Check for overflows
+          require(_to != 0x0);                               // Prevent transfer to 0x0 address. Use burn() instead
+          require(!blocked);                                  // Prevent transfer if transfers are blocked
+          require(balanceOf[msg.sender] >= _value);           // Check if the sender has enough
+          require(balanceOf[_to] + _value >= balanceOf[_to]); // Check for overflows
           balanceOf[msg.sender] -= _value;                     // Subtract from the sender
           balanceOf[_to] += _value;                            // Add the same to the recipient
           Transfer(msg.sender, _to, _value);                   // Notify anyone listening that this transfer took place
@@ -85,11 +85,11 @@
 
       /* A contract attempts to get the coins */
       function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
-          if (_to == 0x0) throw;                                // Prevent transfer to 0x0 address. Use burn() instead
-          if (blocked) throw;                                  // Prevent transfer if transfers are blocked
-          if (balanceOf[_from] < _value) throw;                 // Check if the sender has enough
-          if (balanceOf[_to] + _value < balanceOf[_to]) throw;  // Check for overflows
-          if (_value > allowance[_from][msg.sender]) throw;     // Check allowance
+          require(_to != 0x0);                                // Prevent transfer to 0x0 address. Use burn() instead
+          require(!blocked);                                  // Prevent transfer if transfers are blocked
+          require(balanceOf[_from] >= _value);                 // Check if the sender has enough
+          require(balanceOf[_to] + _value >= balanceOf[_to]);  // Check for overflows
+          require(_value <= allowance[_from][msg.sender]);     // Check allowance
           balanceOf[_from] -= _value;                           // Subtract from the sender
           balanceOf[_to] += _value;                             // Add the same to the recipient
           allowance[_from][msg.sender] -= _value;
@@ -98,7 +98,7 @@
       }
 
       function burn(uint256 _value) returns (bool success) {
-          if (balanceOf[msg.sender] < _value) throw;            // Check if the sender has enough
+          require(balanceOf[msg.sender] >= _value);            // Check if the sender has enough
           balanceOf[msg.sender] -= _value;                      // Subtract from the sender
           totalSupply -= _value;                                // Updates totalSupply
           Burn(msg.sender, _value);
@@ -106,8 +106,8 @@
       }
 
       function burnFrom(address _from, uint256 _value) returns (bool success) {
-          if (balanceOf[_from] < _value) throw;                // Check if the sender has enough
-          if (_value > allowance[_from][msg.sender]) throw;    // Check allowance
+          require(balanceOf[_from] >= _value);                // Check if the sender has enough
+          require(_value <= allowance[_from][msg.sender]);    // Check allowance
           balanceOf[_from] -= _value;                          // Subtract from the sender
           totalSupply -= _value;                               // Updates totalSupply
           Burn(_from, _value);
