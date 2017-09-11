@@ -33,7 +33,7 @@ contract Crowdsale {
 
     /* The function without name is the default function that is called whenever anyone sends funds to a contract */
     function () payable {
-        if (crowdsaleClosed) throw;
+        require (!crowdsaleClosed);
         uint amount = msg.value;
         balanceOf[msg.sender] += amount;
         amountRaised += amount;
