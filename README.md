@@ -3,28 +3,18 @@
 ## 1. Environment setup (assethbox)
 ----
 
-Download the latest version of the assethbox (download the .ova file) [here](https://github.com/asseth/assethbox)
-Download the latest version of Virtual Box [here](https://www.virtualbox.org/)
+Download the latest version of parity or geth
+Install on Chrome Metamask
+Download the latest version of remix
 
-Then open Virtualbox, File/import a new virtual machine with the assethbox.ova file
-
-Login into the VM
-
-    user: vagrant
-    password: vagrant
-
-## 2. Parity setup
+## 2. Parity setup & infrastructure setup
 ----
 
-Launch Terminator (Alt+F2 then type terminator, then enter)
-
-Clone the bphackers ethtraining repo by typing these commands into the terminal:
-
-    git clone https://github.com/bphackers/ethtraining.git
+Launch a terminal 
 
 Sync the blockchain using parity:
 
-    parity --warp --chain=kovan
+    parity --chain=kovan --jsonrpc-apis=all --jsonrpc-hosts=all --jsonrpc-cors=all
 
 Launch Chromium and go to 
 
