@@ -5,7 +5,7 @@
 
 Download the latest version of parity or geth
 Install Metamask on Chrome or Firefox
-Download the latest version of remix
+Download the latest version of remix-ide
 
 ## 2. Parity setup & infrastructure setup
 ----
