@@ -1,4 +1,4 @@
-# Hello, this is the Parity workshop on how to deploy ICO smart contracts
+# Blockchain bootcamp on ICO
 
 ## 1. Software install 
 ----
